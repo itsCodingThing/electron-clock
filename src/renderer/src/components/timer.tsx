@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from "react"
-import { Play, Pause, RotateCcw } from "lucide-react"
+import { Play, Pause, Plus, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Label } from "./ui/label";
+import { Slider } from "./ui/slider";
 
 interface TimerProps {
   duration: number;
@@ -65,15 +68,6 @@ export function Timer(props: TimerProps) {
   return (
     <Card className="shadow-lg">
       <CardContent className="pt-6">
-        <div className="relative mb-8">
-          <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-            <div
-              className="h-full bg-primary transition-all duration-300 ease-linear"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        </div>
-
         <div className="text-center mb-8">
           <span className="text-6xl font-bold tracking-tighter">{formatTime(timeLeft)}</span>
         </div>
@@ -89,10 +83,41 @@ export function Timer(props: TimerProps) {
             <span className="sr-only">{isRunning ? "Pause" : "Start"}</span>
           </Button>
 
-          <Button variant="outline" size="icon" className="h-12 w-12 rounded-full" onClick={handleReset}>
-            <RotateCcw className="h-5 w-5" />
-            <span className="sr-only">Reset</span>
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="icon" className="h-12 w-12 rounded-full" onClick={handleReset}>
+                <Plus className="h-5 w-5" />
+                <span className="sr-only">Reset</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add Timer</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-6 py-4">
+                <div className="space-y-2">
+                  <Label>Pomodoro: 25 minutes</Label>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <Label>Duration: {Math.round(totalTime / 60)} minutes</Label>
+                    <span>{Math.round(totalTime / 60)} min</span>
+                  </div>
+                  <Slider
+                    defaultValue={[Math.round(totalTime / 60)]}
+                    min={1}
+                    max={60}
+                    step={1}
+                    onValueChange={(value) => setCustomTime(value[0])}
+                  />
+                </div>
+
+                <Button variant="secondary" className="w-full" onClick={() => setCustomTime(25)}>
+                  Set
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </CardContent>
     </Card>
