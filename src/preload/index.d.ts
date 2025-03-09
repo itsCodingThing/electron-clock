@@ -1,14 +1,14 @@
-import { ElectronAPI } from '@electron-toolkit/preload'
-import { DbData, TimerData } from '@types/db'
+import { ElectronAPI } from "@electron-toolkit/preload";
+import { DbData, TimerData } from "@types/db";
 
 declare global {
   interface Window {
-    electron: ElectronAPI
+    electron: ElectronAPI;
     api: {
       db: {
-        getAllTimers: () => Promise<DbData>,
-        addTimer: (timer: Omit<TimerData, "id">) => Promise<void>
-      }
-    }
+        getAllTimers: () => Promise<DbData>;
+        addTimer: (timer: Omit<TimerData, "id">) => Promise<void>;
+      };
+    };
   }
 }

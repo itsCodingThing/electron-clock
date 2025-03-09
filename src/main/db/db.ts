@@ -9,11 +9,11 @@ const dbfilePath = os.tmpdir() + path.sep + dbfile;
 
 function createDbfile(): void {
   if (!fs.existsSync(dbfilePath)) {
-    fs.writeFileSync(dbfilePath, JSON.stringify({ timers: [] }));
+    fs.writeFileSync(dbfilePath, JSON.stringify({ timers: [], counter: 0 }));
   }
 }
 
-function saveDbData(data: DbData) {
+function saveDbData(data: DbData): void {
   if (fs.existsSync(dbfilePath)) {
     fs.writeFileSync(dbfilePath, JSON.stringify(data));
   }
@@ -26,15 +26,19 @@ export function initDb(): void {
     const file = await fs.promises.readFile(dbfilePath, "utf8");
     const data = JSON.parse(file) as DbData;
     return data;
-  })
+  });
 
-  ipcMain.handle("db:timer:add", async (_event, timer: Omit<TimerData, "id">) => {
-    const file = await fs.promises.readFile(dbfilePath, "utf8");
-    const data = JSON.parse(file) as DbData;
+  ipcMain.handle(
+    "db:timer:add",
+    async (_event, timer: Omit<TimerData, "id">) => {
+      const file = await fs.promises.readFile(dbfilePath, "utf8");
+      const data = JSON.parse(file) as DbData;
 
-    const payload = { ...timer, id: "id" };
-    data.timers.push(payload);
+      data.counter = data.counter + 1;
+      const payload = { ...timer, id: data.counter.toString() };
+      data.timers.push(payload);
 
-    saveDbData(data);
-  })
+      saveDbData(data);
+    },
+  );
 }

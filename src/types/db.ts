@@ -1,5 +1,6 @@
 export interface DbData {
-  timers: TimerData[]
+  timers: TimerData[];
+  counter: number;
 }
 
 export interface TimerData {
