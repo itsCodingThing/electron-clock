@@ -8,6 +8,8 @@ declare global {
       db: {
         getAllTimers: () => Promise<DbData>;
         addTimer: (timer: Omit<TimerData, "id">) => Promise<void>;
+        updateTimer: (timer: TimerData) => Promise<void>;
+        deleteTimer: (timerId: string) => Promis<void>;
       };
     };
   }

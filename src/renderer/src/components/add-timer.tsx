@@ -90,15 +90,17 @@ export function AddTimer() {
               <Label>
                 Duration: {Math.round(details.durations / 60)} minutes
               </Label>
-              <span>{Math.round(details.durations / 60)} min</span>
+              <span>60 min</span>
             </div>
             <Slider
               defaultValue={[Math.round(details.durations / 60)]}
               min={1}
               max={60}
               step={1}
-              onValueChange={(value) =>
+              onValueChange={(value) => {
+                console.log(value);
                 updateDetails({ tag: "durations", value: value[0] })
+              }
               }
             />
           </div>

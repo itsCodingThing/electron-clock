@@ -5,7 +5,9 @@ import { electronAPI } from '@electron-toolkit/preload'
 const api = {
   db: {
     getAllTimers: () => ipcRenderer.invoke("db:timer:get:all"),
-    addTimer: (timer) => ipcRenderer.invoke("db:timer:add", timer)
+    addTimer: (timer) => ipcRenderer.invoke("db:timer:add", timer),
+    updateTimer: (timer) => ipcRenderer.invoke("db:timer:update", timer),
+    deleteTimer: (timerId) => ipcRenderer.invoke("db:timer:delete", timerId)
   }
 }
 

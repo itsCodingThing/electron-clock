@@ -9,9 +9,13 @@ interface TimerProps {
 }
 
 export function Timer(props: TimerProps): JSX.Element {
-  const [timeLeft, setTimeLeft] = useState(props.duration); // 25 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(props.duration * 60); // minutes in seconds
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setTimeLeft(props.duration);
+  }, [props.duration]);
 
   useEffect(() => {
     if (isRunning) {
@@ -63,6 +67,7 @@ export function Timer(props: TimerProps): JSX.Element {
 
         <div className="flex justify-center items-center gap-4 mb-6">
           <Button
+            disabled={props.duration === 0 ? true : false}
             variant="outline"
             size="icon"
             className="h-12 w-12 rounded-full cursor-pointer"
@@ -71,8 +76,8 @@ export function Timer(props: TimerProps): JSX.Element {
             <RotateCcw className="h-5 w-5" />
             <span className="sr-only">Reset</span>
           </Button>
-
           <Button
+            disabled={props.duration === 0 ? true : false}
             size="icon"
             className="h-16 w-16 rounded-full cursor-pointer"
             onClick={handleStartPause}
