@@ -12,7 +12,6 @@ async function checkDbFile() {
   try {
     const fh = await fs.promises.open(dbfilePath, "r+");
     return fh;
-
   } catch (error) {
     console.log(error);
 
@@ -20,7 +19,6 @@ async function checkDbFile() {
     await fh.close();
 
     return await fs.promises.open(dbfilePath, "r+");
-
   }
 }
 
@@ -32,8 +30,9 @@ function createDbfile() {
 
 async function saveToDbFile(data: DbData) {
   const fh = await checkDbFile();
-  const content = JSON.stringify(data)
+  const content = JSON.stringify(data);
 
+  await fh.truncate(0);
   await fh.writeFile(content);
   await fh.close();
 }

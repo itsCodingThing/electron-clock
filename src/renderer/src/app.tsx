@@ -7,7 +7,7 @@ import { Pencil, Smile, Trash } from "lucide-react";
 
 export default function App(): JSX.Element {
   const { mutate } = useSWRConfig();
-  const [timer, setTimer] = useState(30); // in minutes
+  const [timer, setTimer] = useState(0); // in minutes
   const { data, isLoading } = useSWR("db:timer:get", () =>
     window.api.db.getAllTimers(),
   );
@@ -38,6 +38,17 @@ export default function App(): JSX.Element {
                   <Button
                     variant="outline"
                     size="icon"
+                    className="h-8 w-8 rounded-full hover:bg-green-500 cursor-pointer"
+                    onClick={() => {
+                      setTimer(item.durations);
+                    }}
+                  >
+                    <Smile className="h-5 w-5" />
+                    <span className="sr-only">Set</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
                     className="h-8 w-8 rounded-full cursor-pointer"
                     onClick={() => {
                       console.log(item);
@@ -49,21 +60,10 @@ export default function App(): JSX.Element {
                   <Button
                     variant="outline"
                     size="icon"
-                    className="h-8 w-8 rounded-full cursor-pointer"
-                    onClick={() => {
-                      setTimer(item.durations);
-                    }}
-                  >
-                    <Smile className="h-5 w-5" />
-                    <span className="sr-only">Set</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-8 w-8 rounded-full bg-red-500 cursor-pointer"
+                    className="h-8 w-8 rounded-full hover:bg-red-500 bg-red-500 cursor-pointer"
                     onClick={async () => {
-                      await window.api.db.deleteTimer(item.id)
-                      await mutate("db:timer:get")
+                      await window.api.db.deleteTimer(item.id);
+                      await mutate("db:timer:get");
                     }}
                   >
                     <Trash className="h-5 w-5" />

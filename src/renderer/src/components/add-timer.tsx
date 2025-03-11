@@ -98,10 +98,8 @@ export function AddTimer() {
               max={60}
               step={1}
               onValueChange={(value) => {
-                console.log(value);
-                updateDetails({ tag: "durations", value: value[0] })
-              }
-              }
+                updateDetails({ tag: "durations", value: value[0] });
+              }}
             />
           </div>
           <Button variant="secondary" className="w-full" onClick={add}>

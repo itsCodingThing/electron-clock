@@ -9,7 +9,7 @@ interface TimerProps {
 }
 
 export function Timer(props: TimerProps): JSX.Element {
-  const [timeLeft, setTimeLeft] = useState(props.duration * 60); // minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(props.duration); // minutes in seconds
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -54,6 +54,7 @@ export function Timer(props: TimerProps): JSX.Element {
 
   const handleReset = () => {
     setIsRunning(false);
+    setTimeLeft(props.duration);
   };
 
   return (
