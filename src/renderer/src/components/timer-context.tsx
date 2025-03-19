@@ -1,9 +1,11 @@
 import { createContext, useContext } from "react";
 
-type Action = {
-  type: "set-active";
-  value: { activeCounter: string; duration: number };
-};
+type Action =
+  | {
+      type: "set-active";
+      value: { activeCounter: string; duration: number };
+    }
+  | { type: "reset-timer" };
 type Dispatch = (action: Action) => void;
 type State = { activeCounter: string; duration: number };
 
@@ -11,7 +13,7 @@ export const TimerContext = createContext<
   { state: State; dispatch: Dispatch } | undefined
 >(undefined);
 
-export function timerReducer(state: State, action: Action) {
+export function timerReducer(state: State, action: Action): State {
   switch (action.type) {
     case "set-active": {
       localStorage.setItem("activeTimer", action.value.activeCounter);
@@ -19,6 +21,13 @@ export function timerReducer(state: State, action: Action) {
       return {
         activeCounter: action.value.activeCounter,
         duration: action.value.duration,
+      };
+    }
+
+    case "reset-timer": {
+      return {
+        activeCounter: "",
+        duration: 0,
       };
     }
 

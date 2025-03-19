@@ -95,6 +95,5 @@ function TimerCard(props: TimerProps): JSX.Element {
 
 export default function Timer() {
   const { state } = useTimer();
-
   return <TimerCard duration={state.duration} />;
 }
