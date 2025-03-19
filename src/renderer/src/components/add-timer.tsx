@@ -20,6 +20,7 @@ type Update =
 
 export function AddTimer() {
   const { mutate } = useSWRConfig();
+  const [isOpen, setIsOpen] = useState(false);
   const [details, setDetails] = useState({
     title: "",
     description: "",
@@ -49,9 +50,10 @@ export function AddTimer() {
     });
 
     await mutate("db:timer:get");
+    setIsOpen(false)
   };
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
           variant="outline"
@@ -102,7 +104,7 @@ export function AddTimer() {
               }}
             />
           </div>
-          <Button variant="secondary" className="w-full" onClick={add}>
+          <Button variant="secondary" className="w-full cursor-pointer" onClick={add}>
             Add
           </Button>
         </div>

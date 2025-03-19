@@ -7,7 +7,7 @@ import { initDb } from "./db/db";
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 500,
+    width: 400,
     height: 670,
     resizable: false,
     show: false,

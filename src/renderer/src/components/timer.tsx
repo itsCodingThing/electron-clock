@@ -1,14 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import { Play, Pause, RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { AddTimer } from "./add-timer";
+import { useTimer } from "./timer-context";
+import { formatTime } from "@/lib/utils";
+import { createNotify } from "@/lib/notification";
 
 interface TimerProps {
   duration: number;
 }
 
-export function Timer(props: TimerProps): JSX.Element {
+function TimerCard(props: TimerProps): JSX.Element {
   const [timeLeft, setTimeLeft] = useState(props.duration); // minutes in seconds
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -24,6 +27,7 @@ export function Timer(props: TimerProps): JSX.Element {
           if (prevTime <= 1) {
             clearInterval(intervalRef.current as NodeJS.Timeout);
             setIsRunning(false);
+            createNotify();
             return 0;
           }
           return prevTime - 1;
@@ -39,14 +43,6 @@ export function Timer(props: TimerProps): JSX.Element {
       }
     };
   }, [isRunning]);
-
-  const formatTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-
-    return `${hours > 0 ? `${hours}:` : ""}${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  };
 
   const handleStartPause = () => {
     setIsRunning(!isRunning);
@@ -95,4 +91,10 @@ export function Timer(props: TimerProps): JSX.Element {
       </CardContent>
     </Card>
   );
+}
+
+export default function Timer() {
+  const { state } = useTimer();
+
+  return <TimerCard duration={state.duration} />;
 }

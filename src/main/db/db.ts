@@ -56,12 +56,16 @@ export function initDb(): void {
 
   ipcMain.handle(
     "db:timer:add",
-    async (_event, timer: Omit<TimerData, "id">) => {
+    async (_event, timer: Omit<TimerData, "id created_at">) => {
       const data = await readFromDbFile();
 
       data.counter = data.counter + 1;
-      const payload = { ...timer, id: data.counter.toString() };
-      data.timers.push(payload);
+      const payload = {
+        ...timer,
+        id: data.counter.toString(),
+        created_at: new Date().toISOString(),
+      };
+      data.timers.unshift(payload);
 
       await saveToDbFile(data);
     },
